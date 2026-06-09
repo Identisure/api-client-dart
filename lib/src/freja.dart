@@ -1,3 +1,4 @@
+import 'age_verification.dart';
 import 'exceptions.dart';
 import 'poll_options.dart';
 import 'transport.dart';
@@ -220,17 +221,37 @@ class FrejaEndpoint {
       FrejaStatus.fromJson(await _transport.get('/v3/freja/sign/$id'));
   Future<void> cancelAuth(String id) => _transport.delete('/v3/freja/auth/$id');
   Future<void> cancelSign(String id) => _transport.delete('/v3/freja/sign/$id');
+  Future<void> cancelAgeVerification(String id) => _transport.delete('/v3/freja/age-verification/$id');
 
   Future<FrejaStatus> waitForAuth(String id, {PollOptions opts = const PollOptions()}) =>
       _poll(() => authStatus(id), opts);
   Future<FrejaStatus> waitForSign(String id, {PollOptions opts = const PollOptions()}) =>
       _poll(() => signStatus(id), opts);
 
+  Future<AgeVerificationStatus> ageVerification(AgeVerificationRequest req) async =>
+      AgeVerificationStatus.fromJson(await _transport.post('/v3/freja/age-verification', req.toJson()));
+
+  Future<AgeVerificationStatus> ageVerificationStatus(String id) async =>
+      AgeVerificationStatus.fromJson(await _transport.get('/v3/freja/age-verification/$id'));
+
+  Future<AgeVerificationStatus> waitForAgeVerification(String id, {PollOptions opts = const PollOptions()}) =>
+      _pollAge(() => ageVerificationStatus(id), opts);
+
   Future<FrejaStatus> _poll(Future<FrejaStatus> Function() fn, PollOptions opts) async {
     final deadline = DateTime.now().add(opts.timeout);
     while (true) {
       final status = await fn();
       if (status is! FrejaPending) return status;
+      if (DateTime.now().isAfter(deadline)) throw WaitException(timeout: true);
+      await Future<void>.delayed(opts.interval);
+    }
+  }
+
+  Future<AgeVerificationStatus> _pollAge(Future<AgeVerificationStatus> Function() fn, PollOptions opts) async {
+    final deadline = DateTime.now().add(opts.timeout);
+    while (true) {
+      final status = await fn();
+      if (status is! AgeVerificationPending) return status;
       if (DateTime.now().isAfter(deadline)) throw WaitException(timeout: true);
       await Future<void>.delayed(opts.interval);
     }
