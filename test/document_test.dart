@@ -34,11 +34,4 @@ void main() {
     final result = await client.document.download('doc1');
     expect(result, expected);
   });
-
-  test('delete', () async {
-    mock.enqueue(204, '');
-    await client.document.delete('doc1');
-    expect(mock.lastRequest.method, 'DELETE');
-    expect(mock.lastRequest.url.path, '/document/doc1');
-  });
 }

@@ -13,11 +13,9 @@ class DocumentEndpoint {
   final Transport _transport;
 
   Future<DocumentUploadResponse> upload(List<int> data, String filename, {String mimeType = 'application/pdf'}) async {
-    final body = await _transport.postMultipart('/document', data, filename, mimeType);
+    final body = await _transport.postMultipart('/v3/document', data, filename, mimeType);
     return DocumentUploadResponse.fromJson(body);
   }
 
-  Future<List<int>> download(String id) => _transport.getRaw('/document/$id');
-
-  Future<void> delete(String id) => _transport.delete('/document/$id');
+  Future<List<int>> download(String id) => _transport.getRaw('/v3/document/$id');
 }
