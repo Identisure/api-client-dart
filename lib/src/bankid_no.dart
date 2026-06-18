@@ -50,30 +50,18 @@ class BankIdNoSignRequest {
     this.redirectUrl,
     this.text,
     this.documents,
-    this.requestSsn,
-    this.requestPhone,
-    this.requestEmail,
-    this.requestAddress,
     this.refId,
   });
 
   final String? redirectUrl;
   final String? text;
   final List<String>? documents;
-  final bool? requestSsn;
-  final bool? requestPhone;
-  final bool? requestEmail;
-  final bool? requestAddress;
   final String? refId;
 
   Map<String, dynamic> toJson() => {
         if (redirectUrl != null) 'redirectUrl': redirectUrl,
         if (text != null) 'text': text,
         if (documents != null) 'documents': documents,
-        if (requestSsn != null) 'requestSsn': requestSsn,
-        if (requestPhone != null) 'requestPhone': requestPhone,
-        if (requestEmail != null) 'requestEmail': requestEmail,
-        if (requestAddress != null) 'requestAddress': requestAddress,
         if (refId != null) 'refId': refId,
       };
 }
