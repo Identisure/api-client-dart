@@ -127,7 +127,7 @@ final class BankIdNoCompleted implements BankIdNoStatus {
   const BankIdNoCompleted({
     required this.id,
     this.refId,
-    required this.ssn,
+    this.ssn,
     required this.name,
     required this.givenName,
     required this.surname,
@@ -143,7 +143,7 @@ final class BankIdNoCompleted implements BankIdNoStatus {
 
   final String id;
   final String? refId;
-  final String ssn;
+  final String? ssn;
   final String name;
   final String givenName;
   final String surname;
@@ -159,7 +159,7 @@ final class BankIdNoCompleted implements BankIdNoStatus {
   factory BankIdNoCompleted.fromJson(Map<String, dynamic> json) => BankIdNoCompleted(
         id: json['id'] as String,
         refId: json['refId'] as String?,
-        ssn: json['ssn'] as String,
+        ssn: json['ssn'] as String?,
         name: json['name'] as String,
         givenName: json['givenName'] as String,
         surname: json['surname'] as String,
