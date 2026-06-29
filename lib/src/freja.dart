@@ -238,21 +238,21 @@ class FrejaEndpoint {
       _pollAge(() => ageVerificationStatus(id), opts);
 
   Future<FrejaStatus> _poll(Future<FrejaStatus> Function() fn, PollOptions opts) async {
-    final deadline = DateTime.now().add(opts.timeout);
+    final stopwatch = Stopwatch()..start();
     while (true) {
       final status = await fn();
       if (status is! FrejaPending) return status;
-      if (DateTime.now().isAfter(deadline)) throw WaitException(timeout: true);
+      if (stopwatch.elapsed > opts.timeout) throw WaitException(timeout: true);
       await Future<void>.delayed(opts.interval);
     }
   }
 
   Future<AgeVerificationStatus> _pollAge(Future<AgeVerificationStatus> Function() fn, PollOptions opts) async {
-    final deadline = DateTime.now().add(opts.timeout);
+    final stopwatch = Stopwatch()..start();
     while (true) {
       final status = await fn();
       if (status is! AgeVerificationPending) return status;
-      if (DateTime.now().isAfter(deadline)) throw WaitException(timeout: true);
+      if (stopwatch.elapsed > opts.timeout) throw WaitException(timeout: true);
       await Future<void>.delayed(opts.interval);
     }
   }

@@ -153,11 +153,11 @@ class VippsEndpoint {
       _poll(() => authStatus(id), opts);
 
   Future<VippsStatus> _poll(Future<VippsStatus> Function() fn, PollOptions opts) async {
-    final deadline = DateTime.now().add(opts.timeout);
+    final stopwatch = Stopwatch()..start();
     while (true) {
       final status = await fn();
       if (status is! VippsPending) return status;
-      if (DateTime.now().isAfter(deadline)) throw WaitException(timeout: true);
+      if (stopwatch.elapsed > opts.timeout) throw WaitException(timeout: true);
       await Future<void>.delayed(opts.interval);
     }
   }
