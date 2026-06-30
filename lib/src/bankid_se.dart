@@ -185,7 +185,7 @@ sealed class BankIdSeStatus {
         'PENDING' => BankIdSePending.fromJson(json),
         'COMPLETED' => BankIdSeCompleted.fromJson(json),
         'FAILED' => BankIdSeFailed.fromJson(json),
-        _ => throw FormatException('Unknown bankid-se status: ${json['status']}'),
+        _ => throw IdkollenException(0, 'Unknown bankid-se status: ${json['status']}'),
       };
 }
 
@@ -195,7 +195,7 @@ sealed class BankIdSePhoneStatus {
         'PENDING' => BankIdSePendingPhone.fromJson(json),
         'COMPLETED' => BankIdSeCompleted.fromJson(json),
         'FAILED' => BankIdSeFailed.fromJson(json),
-        _ => throw FormatException('Unknown bankid-se phone status: ${json['status']}'),
+        _ => throw IdkollenException(0, 'Unknown bankid-se phone status: ${json['status']}'),
       };
 }
 

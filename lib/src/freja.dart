@@ -128,7 +128,7 @@ sealed class FrejaStatus {
         'PENDING' => FrejaPending.fromJson(json),
         'COMPLETED' => FrejaCompleted.fromJson(json),
         'FAILED' => FrejaFailed.fromJson(json),
-        _ => throw FormatException('Unknown freja status: ${json['status']}'),
+        _ => throw IdkollenException(0, 'Unknown freja status: ${json['status']}'),
       };
 }
 

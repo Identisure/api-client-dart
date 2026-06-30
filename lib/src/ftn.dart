@@ -36,7 +36,7 @@ sealed class FtnStatus {
         'PENDING' => FtnPending.fromJson(json),
         'COMPLETED' => FtnCompleted.fromJson(json),
         'FAILED' => FtnFailed.fromJson(json),
-        _ => throw FormatException('Unknown ftn status: ${json['status']}'),
+        _ => throw IdkollenException(0, 'Unknown ftn status: ${json['status']}'),
       };
 }
 

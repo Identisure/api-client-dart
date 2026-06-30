@@ -81,7 +81,7 @@ sealed class MitIdStatus {
         'PENDING' => MitIdPending.fromJson(json),
         'COMPLETED' => MitIdCompleted.fromJson(json),
         'FAILED' => MitIdFailed.fromJson(json),
-        _ => throw FormatException('Unknown mitid status: ${json['status']}'),
+        _ => throw IdkollenException(0, 'Unknown mitid status: ${json['status']}'),
       };
 }
 

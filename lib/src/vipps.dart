@@ -64,7 +64,7 @@ sealed class VippsStatus {
         'PENDING' => VippsPending.fromJson(json),
         'COMPLETED' => VippsCompleted.fromJson(json),
         'FAILED' => VippsFailed.fromJson(json),
-        _ => throw FormatException('Unknown vipps status: ${json['status']}'),
+        _ => throw IdkollenException(0, 'Unknown vipps status: ${json['status']}'),
       };
 }
 

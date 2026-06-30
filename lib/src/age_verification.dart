@@ -1,3 +1,5 @@
+import 'exceptions.dart';
+
 class AgeVerificationRequest {
   const AgeVerificationRequest({
     this.minAge,
@@ -28,7 +30,7 @@ sealed class AgeVerificationStatus {
       'PENDING' => AgeVerificationPending.fromJson(json),
       'COMPLETED' => AgeVerificationCompleted.fromJson(json),
       'FAILED' => AgeVerificationFailed.fromJson(json),
-      _ => throw FormatException('Unknown age verification status: ${json['status']}'),
+      _ => throw IdkollenException(0, 'Unknown age verification status: ${json['status']}'),
     };
   }
 }

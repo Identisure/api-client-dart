@@ -93,7 +93,7 @@ sealed class BankIdNoStatus {
         'PENDING' => BankIdNoPending.fromJson(json),
         'COMPLETED' => BankIdNoCompleted.fromJson(json),
         'FAILED' => BankIdNoFailed.fromJson(json),
-        _ => throw FormatException('Unknown bankid-no status: ${json['status']}'),
+        _ => throw IdkollenException(0, 'Unknown bankid-no status: ${json['status']}'),
       };
 }
 
