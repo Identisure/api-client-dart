@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
@@ -15,6 +16,7 @@ class Transport {
         _authHeader = 'Basic ${base64Encode(utf8.encode('$clientId:$clientSecret'))}';
 
   static const _userAgent = 'idkollen-client-dart/0.1.0';
+  static const _requestTimeout = Duration(seconds: 30);
 
   final http.Client _http;
   final String _baseUrl;
@@ -46,29 +48,26 @@ class Transport {
   Future<Map<String, dynamic>> postMultipart(
       String path, List<int> data, String filename, String mimeType) async {
     final req = http.MultipartRequest('POST', Uri.parse('$_baseUrl$path'));
-    req.headers['Authorization'] = _authHeader;
-    req.headers['User-Agent'] = _userAgent;
     req.files.add(http.MultipartFile.fromBytes(
       'file',
       data,
       filename: filename,
       contentType: MediaType.parse(mimeType),
     ));
-    final streamed = await _http.send(req);
-    final res = await http.Response.fromStream(streamed);
-    _ensureOk(res);
-    return _decodeJson(res);
+    return _decodeJson(await _send(req));
   }
 
-  Future<http.Response> _send(http.Request req) async {
+  Future<http.Response> _send(http.BaseRequest req) async {
     req.headers['Authorization'] = _authHeader;
     req.headers['User-Agent'] = _userAgent;
     http.Response res;
     try {
-      final streamed = await _http.send(req);
-      res = await http.Response.fromStream(streamed);
+      final streamed = await _http.send(req).timeout(_requestTimeout);
+      res = await http.Response.fromStream(streamed).timeout(_requestTimeout);
     } on http.ClientException catch (e) {
       throw IdkollenException(0, e.message);
+    } on TimeoutException {
+      throw IdkollenException(0, 'Request timed out after ${_requestTimeout.inSeconds} s');
     }
     _ensureOk(res);
     return res;
