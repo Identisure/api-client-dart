@@ -60,7 +60,7 @@ class IdkollenClientBuilder {
 
   IdkollenClient build() {
     final transport = Transport(
-      httpClient: _httpClient ?? http.Client(),
+      httpClient: _httpClient,
       baseUrl: _baseUrl ?? _environment.baseUrl,
       clientId: clientId,
       clientSecret: clientSecret,

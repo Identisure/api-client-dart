@@ -7,11 +7,12 @@ import 'exceptions.dart';
 
 class Transport {
   Transport({
-    required http.Client httpClient,
+    http.Client? httpClient,
     required String baseUrl,
     required String clientId,
     required String clientSecret,
-  })  : _http = httpClient,
+  })  : _http = httpClient ?? http.Client(),
+        _ownsHttp = httpClient == null,
         _baseUrl = baseUrl.endsWith('/') ? baseUrl.substring(0, baseUrl.length - 1) : baseUrl,
         _authHeader = 'Basic ${base64Encode(utf8.encode('$clientId:$clientSecret'))}';
 
@@ -19,10 +20,13 @@ class Transport {
   static const _requestTimeout = Duration(seconds: 30);
 
   final http.Client _http;
+  final bool _ownsHttp;
   final String _baseUrl;
   final String _authHeader;
 
-  void close() => _http.close();
+  void close() {
+    if (_ownsHttp) _http.close();
+  }
 
   Future<Map<String, dynamic>> post(String path, Map<String, dynamic> body) async {
     final res = await _send(http.Request('POST', Uri.parse('$_baseUrl$path'))
@@ -77,18 +81,21 @@ class Transport {
     if (res.statusCode < 200 || res.statusCode >= 300) {
       String message;
       try {
-        final decoded = jsonDecode(res.body);
-        message = (decoded is Map && decoded['message'] is String) ? decoded['message'] as String : res.body;
+        final decoded = jsonDecode(_bodyText(res));
+        message = (decoded is Map && decoded['message'] is String) ? decoded['message'] as String : _bodyText(res);
       } catch (_) {
-        message = res.body;
+        message = _bodyText(res);
       }
       throw IdkollenException(res.statusCode, message);
     }
   }
 
   Map<String, dynamic> _decodeJson(http.Response res) {
-    if (res.body.isEmpty) return <String, dynamic>{};
-    final decoded = jsonDecode(res.body);
+    if (res.bodyBytes.isEmpty) return <String, dynamic>{};
+    final decoded = jsonDecode(_bodyText(res));
     return decoded is Map<String, dynamic> ? decoded : <String, dynamic>{};
   }
+
+  // JSON is UTF-8 (RFC 8259), but res.body falls back to Latin-1 when Content-Type has no charset.
+  String _bodyText(http.Response res) => utf8.decode(res.bodyBytes, allowMalformed: true);
 }
