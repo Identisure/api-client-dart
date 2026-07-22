@@ -94,6 +94,7 @@ final class VippsCompleted implements VippsStatus {
     this.birthDate,
     this.pid,
     this.bankId,
+    this.authenticatedAt,
   });
 
   final String id;
@@ -108,6 +109,7 @@ final class VippsCompleted implements VippsStatus {
   final String? birthDate;
   final String? pid;
   final String? bankId;
+  final String? authenticatedAt;
 
   factory VippsCompleted.fromJson(Map<String, dynamic> json) => VippsCompleted(
         id: json['id'] as String,
@@ -122,6 +124,7 @@ final class VippsCompleted implements VippsStatus {
         birthDate: json['birthDate'] as String?,
         pid: json['pid'] as String?,
         bankId: json['bankId'] as String?,
+        authenticatedAt: json['authenticatedAt'] as String?,
       );
 }
 

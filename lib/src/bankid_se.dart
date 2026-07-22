@@ -252,6 +252,8 @@ final class BankIdSeCompleted implements BankIdSeStatus, BankIdSePhoneStatus {
     this.certStartDate,
     this.address,
     this.companySignatoryText,
+    this.authenticatedAt,
+    this.signedAt,
   });
 
   final String id;
@@ -263,6 +265,8 @@ final class BankIdSeCompleted implements BankIdSeStatus, BankIdSePhoneStatus {
   final String? certStartDate;
   final String? address;
   final String? companySignatoryText;
+  final String? authenticatedAt;
+  final String? signedAt;
 
   factory BankIdSeCompleted.fromJson(Map<String, dynamic> json) =>
       BankIdSeCompleted(
@@ -275,6 +279,8 @@ final class BankIdSeCompleted implements BankIdSeStatus, BankIdSePhoneStatus {
         certStartDate: json['certStartDate'] as String?,
         address: json['address'] as String?,
         companySignatoryText: json['companySignatoryText'] as String?,
+        authenticatedAt: json['authenticatedAt'] as String?,
+        signedAt: json['signedAt'] as String?,
       );
 }
 

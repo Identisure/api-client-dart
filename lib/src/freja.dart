@@ -164,6 +164,8 @@ final class FrejaCompleted implements FrejaStatus {
     required this.surname,
     this.address,
     this.companySignatoryText,
+    this.authenticatedAt,
+    this.signedAt,
   });
 
   final String id;
@@ -175,6 +177,8 @@ final class FrejaCompleted implements FrejaStatus {
   final String surname;
   final String? address;
   final String? companySignatoryText;
+  final String? authenticatedAt;
+  final String? signedAt;
 
   factory FrejaCompleted.fromJson(Map<String, dynamic> json) => FrejaCompleted(
         id: json['id'] as String,
@@ -186,6 +190,8 @@ final class FrejaCompleted implements FrejaStatus {
         surname: json['surname'] as String,
         address: json['address'] as String?,
         companySignatoryText: json['companySignatoryText'] as String?,
+        authenticatedAt: json['authenticatedAt'] as String?,
+        signedAt: json['signedAt'] as String?,
       );
 }
 

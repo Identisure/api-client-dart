@@ -127,6 +127,8 @@ final class BankIdNoCompleted implements BankIdNoStatus {
     this.bankId,
     this.signResult,
     this.signedDocuments,
+    this.authenticatedAt,
+    this.signedAt,
   });
 
   final String id;
@@ -143,6 +145,8 @@ final class BankIdNoCompleted implements BankIdNoStatus {
   final String? bankId;
   final BankIdNoSignResult? signResult;
   final List<BankIdNoSignedDocument>? signedDocuments;
+  final String? authenticatedAt;
+  final String? signedAt;
 
   factory BankIdNoCompleted.fromJson(Map<String, dynamic> json) => BankIdNoCompleted(
         id: json['id'] as String,
@@ -163,6 +167,8 @@ final class BankIdNoCompleted implements BankIdNoStatus {
         signedDocuments: (json['signedDocuments'] as List<dynamic>?)
             ?.map((e) => BankIdNoSignedDocument.fromJson(e as Map<String, dynamic>))
             .toList(),
+        authenticatedAt: json['authenticatedAt'] as String?,
+        signedAt: json['signedAt'] as String?,
       );
 }
 

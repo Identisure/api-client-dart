@@ -68,6 +68,8 @@ final class FtnCompleted implements FtnStatus {
     this.birthDate,
     this.pid,
     this.bankId,
+    this.bankName,
+    this.authenticatedAt,
   });
 
   final String id;
@@ -82,6 +84,8 @@ final class FtnCompleted implements FtnStatus {
   final String? birthDate;
   final String? pid;
   final String? bankId;
+  final String? bankName;
+  final String? authenticatedAt;
 
   factory FtnCompleted.fromJson(Map<String, dynamic> json) => FtnCompleted(
         id: json['id'] as String,
@@ -96,6 +100,8 @@ final class FtnCompleted implements FtnStatus {
         birthDate: json['birthDate'] as String?,
         pid: json['pid'] as String?,
         bankId: json['bankId'] as String?,
+        bankName: json['bankName'] as String?,
+        authenticatedAt: json['authenticatedAt'] as String?,
       );
 }
 

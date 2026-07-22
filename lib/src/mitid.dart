@@ -114,6 +114,8 @@ final class MitIdCompleted implements MitIdStatus {
     this.pid,
     this.bankId,
     this.signResult,
+    this.authenticatedAt,
+    this.signedAt,
   });
 
   final String id;
@@ -129,6 +131,8 @@ final class MitIdCompleted implements MitIdStatus {
   final String? pid;
   final String? bankId;
   final MitIdSignResult? signResult;
+  final String? authenticatedAt;
+  final String? signedAt;
 
   factory MitIdCompleted.fromJson(Map<String, dynamic> json) => MitIdCompleted(
         id: json['id'] as String,
@@ -146,6 +150,8 @@ final class MitIdCompleted implements MitIdStatus {
         signResult: json['signResult'] == null
             ? null
             : MitIdSignResult.fromJson(json['signResult'] as Map<String, dynamic>),
+        authenticatedAt: json['authenticatedAt'] as String?,
+        signedAt: json['signedAt'] as String?,
       );
 }
 
