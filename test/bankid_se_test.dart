@@ -41,6 +41,7 @@ void main() {
       'name': 'Test User',
       'givenName': 'Test',
       'surname': 'User',
+      'ocspResponse': 'MIIB',
     });
     final result = await client.bankIdSe.auth(const BankIdSeAuthRequest());
     expect(result, isA<BankIdSeCompleted>());

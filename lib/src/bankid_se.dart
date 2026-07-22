@@ -250,6 +250,10 @@ final class BankIdSeCompleted implements BankIdSeStatus, BankIdSePhoneStatus {
     required this.givenName,
     required this.surname,
     this.certStartDate,
+    required this.ocspResponse,
+    this.risk,
+    this.device,
+    this.stepUp,
     this.address,
     this.companySignatoryText,
     this.authenticatedAt,
@@ -263,6 +267,10 @@ final class BankIdSeCompleted implements BankIdSeStatus, BankIdSePhoneStatus {
   final String givenName;
   final String surname;
   final String? certStartDate;
+  final String ocspResponse;
+  final String? risk;
+  final BankIdSeDevice? device;
+  final BankIdSeStepUp? stepUp;
   final String? address;
   final String? companySignatoryText;
   final String? authenticatedAt;
@@ -277,10 +285,38 @@ final class BankIdSeCompleted implements BankIdSeStatus, BankIdSePhoneStatus {
         givenName: json['givenName'] as String,
         surname: json['surname'] as String,
         certStartDate: json['certStartDate'] as String?,
+        ocspResponse: json['ocspResponse'] as String,
+        risk: json['risk'] as String?,
+        device: json['device'] == null ? null : BankIdSeDevice.fromJson(json['device'] as Map<String, dynamic>),
+        stepUp: json['stepUp'] == null ? null : BankIdSeStepUp.fromJson(json['stepUp'] as Map<String, dynamic>),
         address: json['address'] as String?,
         companySignatoryText: json['companySignatoryText'] as String?,
         authenticatedAt: json['authenticatedAt'] as String?,
         signedAt: json['signedAt'] as String?,
+      );
+}
+
+final class BankIdSeDevice {
+  const BankIdSeDevice({this.ipAddress, this.uhi});
+
+  final String? ipAddress;
+  final String? uhi;
+
+  factory BankIdSeDevice.fromJson(Map<String, dynamic> json) => BankIdSeDevice(
+        ipAddress: json['ipAddress'] as String?,
+        uhi: json['uhi'] as String?,
+      );
+}
+
+final class BankIdSeStepUp {
+  const BankIdSeStepUp({this.mrtd, this.face});
+
+  final bool? mrtd;
+  final bool? face;
+
+  factory BankIdSeStepUp.fromJson(Map<String, dynamic> json) => BankIdSeStepUp(
+        mrtd: json['mrtd'] as bool?,
+        face: json['face'] as bool?,
       );
 }
 
