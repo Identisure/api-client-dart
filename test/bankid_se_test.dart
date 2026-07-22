@@ -48,10 +48,10 @@ void main() {
   });
 
   test('auth failed', () async {
-    mock.enqueue(200, {'status': 'FAILED', 'id': 'abc', 'error': 'userCancel'});
+    mock.enqueue(200, {'status': 'FAILED', 'id': 'abc', 'error': 'CANCELLED'});
     final result = await client.bankIdSe.auth(const BankIdSeAuthRequest());
     expect(result, isA<BankIdSeFailed>());
-    expect((result as BankIdSeFailed).error, 'userCancel');
+    expect((result as BankIdSeFailed).error, 'CANCELLED');
   });
 
   test('phoneAuth pending', () async {
@@ -61,7 +61,7 @@ void main() {
       'hintCode': 'outstandingTransaction',
     });
     final result = await client.bankIdSe.phoneAuth(
-      const BankIdSePhoneAuthRequest(ssn: '199001011234', callInitiator: 'user'),
+      const BankIdSePhoneAuthRequest(ssn: '199001011234', callInitiator: 'USER'),
     );
     expect(result, isA<BankIdSePendingPhone>());
   });
