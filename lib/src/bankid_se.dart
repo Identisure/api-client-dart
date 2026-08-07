@@ -185,7 +185,8 @@ sealed class BankIdSeStatus {
         'PENDING' => BankIdSePending.fromJson(json),
         'COMPLETED' => BankIdSeCompleted.fromJson(json),
         'FAILED' => BankIdSeFailed.fromJson(json),
-        _ => throw IdkollenException(0, 'Unknown bankid-se status: ${json['status']}'),
+        final String status => BankIdSeUnknown(status: status),
+        _ => throw IdkollenException(0, 'Invalid bankid-se status: ${json['status']}'),
       };
 }
 
@@ -195,8 +196,15 @@ sealed class BankIdSePhoneStatus {
         'PENDING' => BankIdSePendingPhone.fromJson(json),
         'COMPLETED' => BankIdSeCompleted.fromJson(json),
         'FAILED' => BankIdSeFailed.fromJson(json),
-        _ => throw IdkollenException(0, 'Unknown bankid-se phone status: ${json['status']}'),
+        final String status => BankIdSeUnknown(status: status),
+        _ => throw IdkollenException(0, 'Invalid bankid-se phone status: ${json['status']}'),
       };
+}
+
+final class BankIdSeUnknown implements BankIdSeStatus, BankIdSePhoneStatus {
+  const BankIdSeUnknown({required this.status});
+
+  final String status;
 }
 
 final class BankIdSePending implements BankIdSeStatus {

@@ -30,9 +30,16 @@ sealed class AgeVerificationStatus {
       'PENDING' => AgeVerificationPending.fromJson(json),
       'COMPLETED' => AgeVerificationCompleted.fromJson(json),
       'FAILED' => AgeVerificationFailed.fromJson(json),
-      _ => throw IdkollenException(0, 'Unknown age verification status: ${json['status']}'),
+      final String status => AgeVerificationUnknown(status: status),
+      _ => throw IdkollenException(0, 'Invalid age verification status: ${json['status']}'),
     };
   }
+}
+
+final class AgeVerificationUnknown implements AgeVerificationStatus {
+  const AgeVerificationUnknown({required this.status});
+
+  final String status;
 }
 
 final class AgeVerificationPending implements AgeVerificationStatus {

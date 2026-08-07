@@ -23,6 +23,16 @@ void main() {
     expect((result as FtnPending).url, 'https://login');
   });
 
+  test('unknown status', () async {
+    mock.enqueue(200, {
+      'status': 'SOMETHING_NEW',
+      'id': 'f1',
+    });
+    final result = await client.ftn.authStatus('f1');
+    expect(result, isA<FtnUnknown>());
+    expect((result as FtnUnknown).status, 'SOMETHING_NEW');
+  });
+
   test('age verification completed', () async {
     mock.enqueue(200, {
       'status': 'COMPLETED',

@@ -37,6 +37,7 @@ Future<void> main() async {
       BankIdSeCompleted(:final name, :final ssn) => 'Authenticated: $name ($ssn)',
       BankIdSeFailed(:final error) => 'Failed: $error',
       BankIdSePending() => 'Still pending',
+      BankIdSeUnknown(:final status) => 'Unknown status: $status',
     };
     print(message);
   }

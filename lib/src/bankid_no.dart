@@ -93,8 +93,15 @@ sealed class BankIdNoStatus {
         'PENDING' => BankIdNoPending.fromJson(json),
         'COMPLETED' => BankIdNoCompleted.fromJson(json),
         'FAILED' => BankIdNoFailed.fromJson(json),
-        _ => throw IdkollenException(0, 'Unknown bankid-no status: ${json['status']}'),
+        final String status => BankIdNoUnknown(status: status),
+        _ => throw IdkollenException(0, 'Invalid bankid-no status: ${json['status']}'),
       };
+}
+
+final class BankIdNoUnknown implements BankIdNoStatus {
+  const BankIdNoUnknown({required this.status});
+
+  final String status;
 }
 
 final class BankIdNoPending implements BankIdNoStatus {

@@ -81,8 +81,15 @@ sealed class MitIdStatus {
         'PENDING' => MitIdPending.fromJson(json),
         'COMPLETED' => MitIdCompleted.fromJson(json),
         'FAILED' => MitIdFailed.fromJson(json),
-        _ => throw IdkollenException(0, 'Unknown mitid status: ${json['status']}'),
+        final String status => MitIdUnknown(status: status),
+        _ => throw IdkollenException(0, 'Invalid mitid status: ${json['status']}'),
       };
+}
+
+final class MitIdUnknown implements MitIdStatus {
+  const MitIdUnknown({required this.status});
+
+  final String status;
 }
 
 final class MitIdPending implements MitIdStatus {

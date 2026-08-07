@@ -128,8 +128,15 @@ sealed class FrejaStatus {
         'PENDING' => FrejaPending.fromJson(json),
         'COMPLETED' => FrejaCompleted.fromJson(json),
         'FAILED' => FrejaFailed.fromJson(json),
-        _ => throw IdkollenException(0, 'Unknown freja status: ${json['status']}'),
+        final String status => FrejaUnknown(status: status),
+        _ => throw IdkollenException(0, 'Invalid freja status: ${json['status']}'),
       };
+}
+
+final class FrejaUnknown implements FrejaStatus {
+  const FrejaUnknown({required this.status});
+
+  final String status;
 }
 
 final class FrejaPending implements FrejaStatus {
