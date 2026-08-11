@@ -10,4 +10,5 @@ export 'src/mitid.dart';
 export 'src/ftn.dart';
 export 'src/vipps.dart';
 export 'src/document.dart';
+export 'src/callback.dart';
 // Endpoint + model exports will be added as they're created.

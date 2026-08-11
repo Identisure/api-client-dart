@@ -46,6 +46,14 @@ Future<void> main() async {
 }
 ```
 
+### Verifying callbacks
+
+Pass the raw request body exactly as received, before parsing it.
+
+```dart
+final valid = verifyCallbackSignature(rawBodyBytes, request.headers['x-signature-sha256']!, hmacSecret);
+```
+
 ## Development
 
 ### Prerequisites
