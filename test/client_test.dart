@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:http/http.dart' as http;
 import 'package:idkollen_client/idkollen_client.dart';
 import 'package:idkollen_client/src/transport.dart';
 import 'package:test/test.dart';
@@ -47,4 +50,24 @@ void main() {
           .having((e) => e.message, 'message', 'bad request')),
     );
   });
+
+  test('request timeout throws IdkollenException', () async {
+    final transport = Transport(
+      httpClient: _HangingClient(),
+      baseUrl: 'https://x.test',
+      clientId: 'a',
+      clientSecret: 'b',
+      requestTimeout: const Duration(milliseconds: 10),
+    );
+
+    expect(
+      () => transport.get('/v3/ping'),
+      throwsA(isA<IdkollenException>().having((e) => e.statusCode, 'statusCode', 0)),
+    );
+  });
+}
+
+class _HangingClient extends http.BaseClient {
+  @override
+  Future<http.StreamedResponse> send(http.BaseRequest request) => Completer<http.StreamedResponse>().future;
 }

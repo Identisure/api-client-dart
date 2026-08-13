@@ -42,6 +42,7 @@ class IdkollenClientBuilder {
   Environment _environment = Environment.production;
   String? _baseUrl;
   http.Client? _httpClient;
+  Duration _timeout = const Duration(seconds: 30);
 
   IdkollenClientBuilder environment(Environment env) {
     _environment = env;
@@ -58,12 +59,19 @@ class IdkollenClientBuilder {
     return this;
   }
 
+  /// Timeout for each HTTP request. Must be positive. Default: 30 seconds.
+  IdkollenClientBuilder timeout(Duration timeout) {
+    _timeout = timeout;
+    return this;
+  }
+
   IdkollenClient build() {
     final transport = Transport(
       httpClient: _httpClient,
       baseUrl: _baseUrl ?? _environment.baseUrl,
       clientId: clientId,
       clientSecret: clientSecret,
+      requestTimeout: _timeout,
     );
     return IdkollenClient._(transport);
   }

@@ -11,18 +11,20 @@ class Transport {
     required String baseUrl,
     required String clientId,
     required String clientSecret,
+    Duration requestTimeout = const Duration(seconds: 30),
   })  : _http = httpClient ?? http.Client(),
         _ownsHttp = httpClient == null,
         _baseUrl = baseUrl.endsWith('/') ? baseUrl.substring(0, baseUrl.length - 1) : baseUrl,
-        _authHeader = 'Basic ${base64Encode(utf8.encode('$clientId:$clientSecret'))}';
+        _authHeader = 'Basic ${base64Encode(utf8.encode('$clientId:$clientSecret'))}',
+        _requestTimeout = requestTimeout;
 
   static const _userAgent = 'idkollen-client-dart/0.1.0';
-  static const _requestTimeout = Duration(seconds: 30);
 
   final http.Client _http;
   final bool _ownsHttp;
   final String _baseUrl;
   final String _authHeader;
+  final Duration _requestTimeout;
 
   void close() {
     if (_ownsHttp) _http.close();
@@ -71,7 +73,7 @@ class Transport {
     } on http.ClientException catch (e) {
       throw IdkollenException(0, e.message);
     } on TimeoutException {
-      throw IdkollenException(0, 'Request timed out after ${_requestTimeout.inSeconds} s');
+      throw IdkollenException(0, 'Request timed out after ${_requestTimeout.inMilliseconds} ms');
     }
     _ensureOk(res);
     return res;
