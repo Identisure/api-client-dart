@@ -58,7 +58,7 @@ final valid = verifyCallbackSignature(rawBodyBytes, request.headers['x-signature
 
 ### Prerequisites
 
-- Dart 3.0+
+- Dart 3.4+
 
 ### Build / Test / Analyze
 
