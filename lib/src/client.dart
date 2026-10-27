@@ -10,8 +10,8 @@ import 'mitid.dart';
 import 'transport.dart';
 import 'vipps.dart';
 
-class IdkollenClient {
-  IdkollenClient._(this._transport)
+class IdentisureClient {
+  IdentisureClient._(this._transport)
       : bankIdSe = BankIdSeEndpoint(_transport),
         bankIdNo = BankIdNoEndpoint(_transport),
         freja = FrejaEndpoint(_transport),
@@ -33,8 +33,8 @@ class IdkollenClient {
   void close() => _transport.close();
 }
 
-class IdkollenClientBuilder {
-  IdkollenClientBuilder(this.clientId, this.clientSecret);
+class IdentisureClientBuilder {
+  IdentisureClientBuilder(this.clientId, this.clientSecret);
 
   final String clientId;
   final String clientSecret;
@@ -44,28 +44,28 @@ class IdkollenClientBuilder {
   http.Client? _httpClient;
   Duration _timeout = const Duration(seconds: 30);
 
-  IdkollenClientBuilder environment(Environment env) {
+  IdentisureClientBuilder environment(Environment env) {
     _environment = env;
     return this;
   }
 
-  IdkollenClientBuilder baseUrl(String url) {
+  IdentisureClientBuilder baseUrl(String url) {
     _baseUrl = url;
     return this;
   }
 
-  IdkollenClientBuilder httpClient(http.Client client) {
+  IdentisureClientBuilder httpClient(http.Client client) {
     _httpClient = client;
     return this;
   }
 
   /// Timeout for each HTTP request. Must be positive. Default: 30 seconds.
-  IdkollenClientBuilder timeout(Duration timeout) {
+  IdentisureClientBuilder timeout(Duration timeout) {
     _timeout = timeout;
     return this;
   }
 
-  IdkollenClient build() {
+  IdentisureClient build() {
     final transport = Transport(
       httpClient: _httpClient,
       baseUrl: _baseUrl ?? _environment.baseUrl,
@@ -73,6 +73,6 @@ class IdkollenClientBuilder {
       clientSecret: clientSecret,
       requestTimeout: _timeout,
     );
-    return IdkollenClient._(transport);
+    return IdentisureClient._(transport);
   }
 }

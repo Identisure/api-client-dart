@@ -129,7 +129,7 @@ sealed class FrejaStatus {
         'COMPLETED' => FrejaCompleted.fromJson(json),
         'FAILED' => FrejaFailed.fromJson(json),
         final String status => FrejaUnknown(status: status),
-        _ => throw IdkollenException(0, 'Invalid freja status: ${json['status']}'),
+        _ => throw IdentisureException(0, 'Invalid freja status: ${json['status']}'),
       };
 }
 

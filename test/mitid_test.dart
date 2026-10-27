@@ -1,15 +1,15 @@
-import 'package:idkollen_client/idkollen_client.dart';
+import 'package:identisure_client/identisure_client.dart';
 import 'package:test/test.dart';
 
 import 'mock_client.dart';
 
 void main() {
   late MockClient mock;
-  late IdkollenClient client;
+  late IdentisureClient client;
 
   setUp(() {
     mock = MockClient();
-    client = IdkollenClientBuilder('cid', 'sec').baseUrl('https://x.test').httpClient(mock).build();
+    client = IdentisureClientBuilder('cid', 'sec').baseUrl('https://x.test').httpClient(mock).build();
   });
 
   test('auth pending', () async {

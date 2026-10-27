@@ -186,7 +186,7 @@ sealed class BankIdSeStatus {
         'COMPLETED' => BankIdSeCompleted.fromJson(json),
         'FAILED' => BankIdSeFailed.fromJson(json),
         final String status => BankIdSeUnknown(status: status),
-        _ => throw IdkollenException(0, 'Invalid bankid-se status: ${json['status']}'),
+        _ => throw IdentisureException(0, 'Invalid bankid-se status: ${json['status']}'),
       };
 }
 
@@ -197,7 +197,7 @@ sealed class BankIdSePhoneStatus {
         'COMPLETED' => BankIdSeCompleted.fromJson(json),
         'FAILED' => BankIdSeFailed.fromJson(json),
         final String status => BankIdSeUnknown(status: status),
-        _ => throw IdkollenException(0, 'Invalid bankid-se phone status: ${json['status']}'),
+        _ => throw IdentisureException(0, 'Invalid bankid-se phone status: ${json['status']}'),
       };
 }
 

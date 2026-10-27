@@ -1,6 +1,6 @@
 enum Environment {
-  production('https://api.idkollen.se'),
-  staging('https://stgapi.idkollen.se');
+  production('https://api.identisure.com'),
+  staging('https://stgapi.identisure.com');
 
   const Environment(this.baseUrl);
   final String baseUrl;

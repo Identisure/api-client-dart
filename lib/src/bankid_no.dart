@@ -94,7 +94,7 @@ sealed class BankIdNoStatus {
         'COMPLETED' => BankIdNoCompleted.fromJson(json),
         'FAILED' => BankIdNoFailed.fromJson(json),
         final String status => BankIdNoUnknown(status: status),
-        _ => throw IdkollenException(0, 'Invalid bankid-no status: ${json['status']}'),
+        _ => throw IdentisureException(0, 'Invalid bankid-no status: ${json['status']}'),
       };
 }
 

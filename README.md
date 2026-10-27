@@ -1,30 +1,30 @@
 <img align="left" height="100" style="margin-right: 10px;" src="../img/icon.png">
 
-# IDkollen Dart Client
+# Identisure Dart Client
 
 [![pub.dev version][pub-image]][pub-url]
 [![MIT license][license-image]][license-url]
 
-[pub-image]: https://img.shields.io/pub/v/idkollen_client?style=flat-square
-[pub-url]: https://pub.dev/packages/idkollen_client
+[pub-image]: https://img.shields.io/pub/v/identisure_client?style=flat-square
+[pub-url]: https://pub.dev/packages/identisure_client
 [license-image]: https://img.shields.io/badge/license-MIT-blue?style=flat-square
 [license-url]: https://opensource.org/license/mit
 
-API client for the [IDkollen](https://developers.idkollen.se) REST API.
+API client for the [Identisure](https://developers.identisure.com) REST API.
 
 ## Installation
 
 ```sh
-dart pub add idkollen_client
+dart pub add identisure_client
 ```
 
 ## Usage
 
 ```dart
-import 'package:idkollen_client/idkollen_client.dart';
+import 'package:identisure_client/identisure_client.dart';
 
 Future<void> main() async {
-  final client = IdkollenClientBuilder('client_id', 'client_secret')
+  final client = IdentisureClientBuilder('client_id', 'client_secret')
       .environment(Environment.staging)
       .build();
 

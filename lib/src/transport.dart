@@ -18,7 +18,7 @@ class Transport {
         _authHeader = 'Basic ${base64Encode(utf8.encode('$clientId:$clientSecret'))}',
         _requestTimeout = requestTimeout;
 
-  static const _userAgent = 'idkollen-client-dart/0.1.0';
+  static const _userAgent = 'identisure-client-dart/0.1.0';
 
   final http.Client _http;
   final bool _ownsHttp;
@@ -71,9 +71,9 @@ class Transport {
       final streamed = await _http.send(req).timeout(_requestTimeout);
       res = await http.Response.fromStream(streamed).timeout(_requestTimeout);
     } on http.ClientException catch (e) {
-      throw IdkollenException(0, e.message);
+      throw IdentisureException(0, e.message);
     } on TimeoutException {
-      throw IdkollenException(0, 'Request timed out after ${_requestTimeout.inMilliseconds} ms');
+      throw IdentisureException(0, 'Request timed out after ${_requestTimeout.inMilliseconds} ms');
     }
     _ensureOk(res);
     return res;
@@ -88,7 +88,7 @@ class Transport {
       } catch (_) {
         message = _bodyText(res);
       }
-      throw IdkollenException(res.statusCode, message);
+      throw IdentisureException(res.statusCode, message);
     }
   }
 

@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:idkollen_client/idkollen_client.dart';
+import 'package:identisure_client/identisure_client.dart';
 import 'package:test/test.dart';
 
 import 'mock_client.dart';
@@ -14,11 +14,11 @@ Map<String, dynamic> _fixture(String path) => jsonDecode(_raw(path)) as Map<Stri
 
 void main() {
   late MockClient mock;
-  late IdkollenClient client;
+  late IdentisureClient client;
 
   setUp(() {
     mock = MockClient();
-    client = IdkollenClientBuilder('cid', 'sec').baseUrl('https://x.test').httpClient(mock).build();
+    client = IdentisureClientBuilder('cid', 'sec').baseUrl('https://x.test').httpClient(mock).build();
   });
 
   /// Queues start (201), one pending poll and the terminal poll. Returns the session id.
@@ -487,7 +487,7 @@ void main() {
 
     await expectLater(
       client.ftn.auth(const FtnAuthRequest()),
-      throwsA(isA<IdkollenException>()
+      throwsA(isA<IdentisureException>()
           .having((e) => e.statusCode, 'statusCode', 400)
           .having((e) => e.message, 'message', contains('Invalid request'))),
     );

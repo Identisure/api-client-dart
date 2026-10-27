@@ -1,15 +1,15 @@
 import 'dart:async';
 
 import 'package:http/http.dart' as http;
-import 'package:idkollen_client/idkollen_client.dart';
-import 'package:idkollen_client/src/transport.dart';
+import 'package:identisure_client/identisure_client.dart';
+import 'package:identisure_client/src/transport.dart';
 import 'package:test/test.dart';
 
 import 'mock_client.dart';
 
 void main() {
   test('builder produces a client', () {
-    final client = IdkollenClientBuilder('id', 'secret')
+    final client = IdentisureClientBuilder('id', 'secret')
         .environment(Environment.staging)
         .build();
     expect(client, isNotNull);
@@ -29,11 +29,11 @@ void main() {
     await transport.get('/v3/ping');
 
     expect(mock.lastRequest.headers['Authorization'], 'Basic Y2lkOnNlYw==');
-    expect(mock.lastRequest.headers['User-Agent'], contains('idkollen-client-dart/'));
+    expect(mock.lastRequest.headers['User-Agent'], contains('identisure-client-dart/'));
     expect(mock.lastRequest.url.toString(), 'https://example.test/v3/ping');
   });
 
-  test('non-2xx throws IdkollenException', () async {
+  test('non-2xx throws IdentisureException', () async {
     final mock = MockClient();
     mock.enqueue(400, {'message': 'bad request'});
     final transport = Transport(
@@ -45,13 +45,13 @@ void main() {
 
     expect(
       () => transport.post('/v3/things', {'a': 1}),
-      throwsA(isA<IdkollenException>()
+      throwsA(isA<IdentisureException>()
           .having((e) => e.statusCode, 'statusCode', 400)
           .having((e) => e.message, 'message', 'bad request')),
     );
   });
 
-  test('request timeout throws IdkollenException', () async {
+  test('request timeout throws IdentisureException', () async {
     final transport = Transport(
       httpClient: _HangingClient(),
       baseUrl: 'https://x.test',
@@ -62,7 +62,7 @@ void main() {
 
     expect(
       () => transport.get('/v3/ping'),
-      throwsA(isA<IdkollenException>().having((e) => e.statusCode, 'statusCode', 0)),
+      throwsA(isA<IdentisureException>().having((e) => e.statusCode, 'statusCode', 0)),
     );
   });
 }

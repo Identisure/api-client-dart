@@ -31,7 +31,7 @@ sealed class AgeVerificationStatus {
       'COMPLETED' => AgeVerificationCompleted.fromJson(json),
       'FAILED' => AgeVerificationFailed.fromJson(json),
       final String status => AgeVerificationUnknown(status: status),
-      _ => throw IdkollenException(0, 'Invalid age verification status: ${json['status']}'),
+      _ => throw IdentisureException(0, 'Invalid age verification status: ${json['status']}'),
     };
   }
 }

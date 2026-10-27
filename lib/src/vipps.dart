@@ -65,7 +65,7 @@ sealed class VippsStatus {
         'COMPLETED' => VippsCompleted.fromJson(json),
         'FAILED' => VippsFailed.fromJson(json),
         final String status => VippsUnknown(status: status),
-        _ => throw IdkollenException(0, 'Invalid vipps status: ${json['status']}'),
+        _ => throw IdentisureException(0, 'Invalid vipps status: ${json['status']}'),
       };
 }
 

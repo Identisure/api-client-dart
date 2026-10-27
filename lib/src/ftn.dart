@@ -37,7 +37,7 @@ sealed class FtnStatus {
         'COMPLETED' => FtnCompleted.fromJson(json),
         'FAILED' => FtnFailed.fromJson(json),
         final String status => FtnUnknown(status: status),
-        _ => throw IdkollenException(0, 'Invalid ftn status: ${json['status']}'),
+        _ => throw IdentisureException(0, 'Invalid ftn status: ${json['status']}'),
       };
 }
 

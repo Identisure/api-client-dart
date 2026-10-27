@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:idkollen_client/idkollen_client.dart';
+import 'package:identisure_client/identisure_client.dart';
 import 'package:test/test.dart';
 
 void main() {

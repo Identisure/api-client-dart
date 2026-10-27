@@ -82,7 +82,7 @@ sealed class MitIdStatus {
         'COMPLETED' => MitIdCompleted.fromJson(json),
         'FAILED' => MitIdFailed.fromJson(json),
         final String status => MitIdUnknown(status: status),
-        _ => throw IdkollenException(0, 'Invalid mitid status: ${json['status']}'),
+        _ => throw IdentisureException(0, 'Invalid mitid status: ${json['status']}'),
       };
 }
 

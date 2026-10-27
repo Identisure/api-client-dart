@@ -1,10 +1,10 @@
-class IdkollenException implements Exception {
-  IdkollenException(this.statusCode, this.message);
+class IdentisureException implements Exception {
+  IdentisureException(this.statusCode, this.message);
   final int statusCode;
   final String message;
 
   @override
-  String toString() => 'IdkollenException($statusCode): $message';
+  String toString() => 'IdentisureException($statusCode): $message';
 }
 
 class WaitException implements Exception {
