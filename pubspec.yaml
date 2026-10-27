@@ -1,7 +1,7 @@
 name: identisure_client
 description: Dart client for the Identisure REST API.
 version: 0.1.0
-repository: https://github.com/identisure/idk-clients
+repository: https://github.com/identisure/api-client-dart
 
 environment:
   sdk: ^3.4.0

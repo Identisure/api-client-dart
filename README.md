@@ -1,4 +1,4 @@
-<img align="left" height="100" style="margin-right: 10px;" src="../img/icon.png">
+<img align="left" height="100" style="margin-right: 10px;" src="img/icon.png">
 
 # Identisure Dart Client
 
@@ -59,6 +59,8 @@ final valid = verifyCallbackSignature(rawBodyBytes, request.headers['x-signature
 ### Prerequisites
 
 - Dart 3.4+
+
+The tests load shared fixtures from a git submodule. Clone with `--recurse-submodules`, or run `git submodule update --init` in an existing clone.
 
 ### Build / Test / Analyze
 

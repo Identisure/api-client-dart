@@ -9,7 +9,7 @@ import 'mock_client.dart';
 const _fastPoll = PollOptions(interval: Duration(milliseconds: 1));
 final _authHeader = 'Basic ${base64Encode(utf8.encode('cid:sec'))}';
 
-String _raw(String path) => File('../fixtures/$path').readAsStringSync();
+String _raw(String path) => File('fixtures/$path').readAsStringSync();
 Map<String, dynamic> _fixture(String path) =>
     jsonDecode(_raw(path)) as Map<String, dynamic>;
 
