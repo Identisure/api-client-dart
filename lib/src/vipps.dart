@@ -60,12 +60,14 @@ class VippsBackchannelAuthRequest {
 }
 
 sealed class VippsStatus {
-  factory VippsStatus.fromJson(Map<String, dynamic> json) => switch (json['status']) {
+  factory VippsStatus.fromJson(Map<String, dynamic> json) =>
+      switch (json['status']) {
         'PENDING' => VippsPending.fromJson(json),
         'COMPLETED' => VippsCompleted.fromJson(json),
         'FAILED' => VippsFailed.fromJson(json),
         final String status => VippsUnknown(status: status),
-        _ => throw IdentisureException(0, 'Invalid vipps status: ${json['status']}'),
+        _ => throw IdentisureException(
+            0, 'Invalid vipps status: ${json['status']}'),
       };
 }
 
@@ -151,18 +153,21 @@ class VippsEndpoint {
   VippsEndpoint(this._transport);
   final Transport _transport;
 
-  Future<VippsStatus> auth(VippsAuthRequest req) async =>
-      VippsStatus.fromJson(await _transport.post('/v3/vipps/auth', req.toJson()));
+  Future<VippsStatus> auth(VippsAuthRequest req) async => VippsStatus.fromJson(
+      await _transport.post('/v3/vipps/auth', req.toJson()));
   Future<VippsStatus> backchannelAuth(VippsBackchannelAuthRequest req) async =>
-      VippsStatus.fromJson(await _transport.post('/v3/vipps/backchannel/auth', req.toJson()));
+      VippsStatus.fromJson(
+          await _transport.post('/v3/vipps/backchannel/auth', req.toJson()));
   Future<VippsStatus> authStatus(String id) async =>
       VippsStatus.fromJson(await _transport.get('/v3/vipps/auth/$id'));
   Future<void> cancelAuth(String id) => _transport.delete('/v3/vipps/auth/$id');
 
-  Future<VippsStatus> waitForAuth(String id, {PollOptions opts = const PollOptions()}) =>
+  Future<VippsStatus> waitForAuth(String id,
+          {PollOptions opts = const PollOptions()}) =>
       _poll(() => authStatus(id), opts);
 
-  Future<VippsStatus> _poll(Future<VippsStatus> Function() fn, PollOptions opts) async {
+  Future<VippsStatus> _poll(
+      Future<VippsStatus> Function() fn, PollOptions opts) async {
     final stopwatch = Stopwatch()..start();
     while (true) {
       final status = await fn();

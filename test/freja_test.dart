@@ -9,7 +9,10 @@ void main() {
 
   setUp(() {
     mock = MockClient();
-    client = IdentisureClientBuilder('cid', 'sec').baseUrl('https://x.test').httpClient(mock).build();
+    client = IdentisureClientBuilder('cid', 'sec')
+        .baseUrl('https://x.test')
+        .httpClient(mock)
+        .build();
   });
 
   test('auth pending', () async {

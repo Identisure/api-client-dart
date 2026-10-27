@@ -34,7 +34,8 @@ class BankIdNoAuthRequest {
 }
 
 class BankIdNoBackchannelAuthRequest {
-  const BankIdNoBackchannelAuthRequest({required this.ssn, this.callbackUrl, this.refId});
+  const BankIdNoBackchannelAuthRequest(
+      {required this.ssn, this.callbackUrl, this.refId});
   final String ssn;
   final String? callbackUrl;
   final String? refId;
@@ -67,11 +68,13 @@ class BankIdNoSignRequest {
 }
 
 class BankIdNoSignResult {
-  const BankIdNoSignResult({required this.endUser, required this.merchant, required this.hash});
+  const BankIdNoSignResult(
+      {required this.endUser, required this.merchant, required this.hash});
   final String endUser;
   final String merchant;
   final String hash;
-  factory BankIdNoSignResult.fromJson(Map<String, dynamic> json) => BankIdNoSignResult(
+  factory BankIdNoSignResult.fromJson(Map<String, dynamic> json) =>
+      BankIdNoSignResult(
         endUser: json['endUser'] as String,
         merchant: json['merchant'] as String,
         hash: json['hash'] as String,
@@ -82,19 +85,22 @@ class BankIdNoSignedDocument {
   const BankIdNoSignedDocument({required this.id, required this.hash});
   final String id;
   final String hash;
-  factory BankIdNoSignedDocument.fromJson(Map<String, dynamic> json) => BankIdNoSignedDocument(
+  factory BankIdNoSignedDocument.fromJson(Map<String, dynamic> json) =>
+      BankIdNoSignedDocument(
         id: json['id'] as String,
         hash: json['hash'] as String,
       );
 }
 
 sealed class BankIdNoStatus {
-  factory BankIdNoStatus.fromJson(Map<String, dynamic> json) => switch (json['status']) {
+  factory BankIdNoStatus.fromJson(Map<String, dynamic> json) =>
+      switch (json['status']) {
         'PENDING' => BankIdNoPending.fromJson(json),
         'COMPLETED' => BankIdNoCompleted.fromJson(json),
         'FAILED' => BankIdNoFailed.fromJson(json),
         final String status => BankIdNoUnknown(status: status),
-        _ => throw IdentisureException(0, 'Invalid bankid-no status: ${json['status']}'),
+        _ => throw IdentisureException(
+            0, 'Invalid bankid-no status: ${json['status']}'),
       };
 }
 
@@ -105,12 +111,14 @@ final class BankIdNoUnknown implements BankIdNoStatus {
 }
 
 final class BankIdNoPending implements BankIdNoStatus {
-  const BankIdNoPending({required this.id, this.refId, this.url, this.bindingMessage});
+  const BankIdNoPending(
+      {required this.id, this.refId, this.url, this.bindingMessage});
   final String id;
   final String? refId;
   final String? url;
   final String? bindingMessage;
-  factory BankIdNoPending.fromJson(Map<String, dynamic> json) => BankIdNoPending(
+  factory BankIdNoPending.fromJson(Map<String, dynamic> json) =>
+      BankIdNoPending(
         id: json['id'] as String,
         refId: json['refId'] as String?,
         url: json['url'] as String?,
@@ -155,7 +163,8 @@ final class BankIdNoCompleted implements BankIdNoStatus {
   final String? authenticatedAt;
   final String? signedAt;
 
-  factory BankIdNoCompleted.fromJson(Map<String, dynamic> json) => BankIdNoCompleted(
+  factory BankIdNoCompleted.fromJson(Map<String, dynamic> json) =>
+      BankIdNoCompleted(
         id: json['id'] as String,
         refId: json['refId'] as String?,
         ssn: json['ssn'] as String?,
@@ -170,9 +179,11 @@ final class BankIdNoCompleted implements BankIdNoStatus {
         bankId: json['bankId'] as String?,
         signResult: json['signResult'] == null
             ? null
-            : BankIdNoSignResult.fromJson(json['signResult'] as Map<String, dynamic>),
+            : BankIdNoSignResult.fromJson(
+                json['signResult'] as Map<String, dynamic>),
         signedDocuments: (json['signedDocuments'] as List<dynamic>?)
-            ?.map((e) => BankIdNoSignedDocument.fromJson(e as Map<String, dynamic>))
+            ?.map((e) =>
+                BankIdNoSignedDocument.fromJson(e as Map<String, dynamic>))
             .toList(),
         authenticatedAt: json['authenticatedAt'] as String?,
         signedAt: json['signedAt'] as String?,
@@ -196,34 +207,48 @@ class BankIdNoEndpoint {
   final Transport _transport;
 
   Future<BankIdNoStatus> auth(BankIdNoAuthRequest req) async =>
-      BankIdNoStatus.fromJson(await _transport.post('/v3/bankid-no/auth', req.toJson()));
-  Future<BankIdNoStatus> backchannelAuth(BankIdNoBackchannelAuthRequest req) async =>
-      BankIdNoStatus.fromJson(await _transport.post('/v3/bankid-no/backchannel/auth', req.toJson()));
+      BankIdNoStatus.fromJson(
+          await _transport.post('/v3/bankid-no/auth', req.toJson()));
+  Future<BankIdNoStatus> backchannelAuth(
+          BankIdNoBackchannelAuthRequest req) async =>
+      BankIdNoStatus.fromJson(await _transport.post(
+          '/v3/bankid-no/backchannel/auth', req.toJson()));
   Future<BankIdNoStatus> sign(BankIdNoSignRequest req) async =>
-      BankIdNoStatus.fromJson(await _transport.post('/v3/bankid-no/sign', req.toJson()));
+      BankIdNoStatus.fromJson(
+          await _transport.post('/v3/bankid-no/sign', req.toJson()));
   Future<BankIdNoStatus> authStatus(String id) async =>
       BankIdNoStatus.fromJson(await _transport.get('/v3/bankid-no/auth/$id'));
   Future<BankIdNoStatus> signStatus(String id) async =>
       BankIdNoStatus.fromJson(await _transport.get('/v3/bankid-no/sign/$id'));
-  Future<void> cancelAuth(String id) => _transport.delete('/v3/bankid-no/auth/$id');
-  Future<void> cancelSign(String id) => _transport.delete('/v3/bankid-no/sign/$id');
-  Future<void> cancelAgeVerification(String id) => _transport.delete('/v3/bankid-no/age-verification/$id');
+  Future<void> cancelAuth(String id) =>
+      _transport.delete('/v3/bankid-no/auth/$id');
+  Future<void> cancelSign(String id) =>
+      _transport.delete('/v3/bankid-no/sign/$id');
+  Future<void> cancelAgeVerification(String id) =>
+      _transport.delete('/v3/bankid-no/age-verification/$id');
 
-  Future<BankIdNoStatus> waitForAuth(String id, {PollOptions opts = const PollOptions()}) =>
+  Future<BankIdNoStatus> waitForAuth(String id,
+          {PollOptions opts = const PollOptions()}) =>
       _poll(() => authStatus(id), opts);
-  Future<BankIdNoStatus> waitForSign(String id, {PollOptions opts = const PollOptions()}) =>
+  Future<BankIdNoStatus> waitForSign(String id,
+          {PollOptions opts = const PollOptions()}) =>
       _poll(() => signStatus(id), opts);
 
-  Future<AgeVerificationStatus> ageVerification(AgeVerificationRequest req) async =>
-      AgeVerificationStatus.fromJson(await _transport.post('/v3/bankid-no/age-verification', req.toJson()));
+  Future<AgeVerificationStatus> ageVerification(
+          AgeVerificationRequest req) async =>
+      AgeVerificationStatus.fromJson(await _transport.post(
+          '/v3/bankid-no/age-verification', req.toJson()));
 
   Future<AgeVerificationStatus> ageVerificationStatus(String id) async =>
-      AgeVerificationStatus.fromJson(await _transport.get('/v3/bankid-no/age-verification/$id'));
+      AgeVerificationStatus.fromJson(
+          await _transport.get('/v3/bankid-no/age-verification/$id'));
 
-  Future<AgeVerificationStatus> waitForAgeVerification(String id, {PollOptions opts = const PollOptions()}) =>
+  Future<AgeVerificationStatus> waitForAgeVerification(String id,
+          {PollOptions opts = const PollOptions()}) =>
       _pollAge(() => ageVerificationStatus(id), opts);
 
-  Future<BankIdNoStatus> _poll(Future<BankIdNoStatus> Function() fn, PollOptions opts) async {
+  Future<BankIdNoStatus> _poll(
+      Future<BankIdNoStatus> Function() fn, PollOptions opts) async {
     final stopwatch = Stopwatch()..start();
     while (true) {
       final status = await fn();
@@ -233,7 +258,8 @@ class BankIdNoEndpoint {
     }
   }
 
-  Future<AgeVerificationStatus> _pollAge(Future<AgeVerificationStatus> Function() fn, PollOptions opts) async {
+  Future<AgeVerificationStatus> _pollAge(
+      Future<AgeVerificationStatus> Function() fn, PollOptions opts) async {
     final stopwatch = Stopwatch()..start();
     while (true) {
       final status = await fn();

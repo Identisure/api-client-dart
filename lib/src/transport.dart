@@ -14,8 +14,11 @@ class Transport {
     Duration requestTimeout = const Duration(seconds: 30),
   })  : _http = httpClient ?? http.Client(),
         _ownsHttp = httpClient == null,
-        _baseUrl = baseUrl.endsWith('/') ? baseUrl.substring(0, baseUrl.length - 1) : baseUrl,
-        _authHeader = 'Basic ${base64Encode(utf8.encode('$clientId:$clientSecret'))}',
+        _baseUrl = baseUrl.endsWith('/')
+            ? baseUrl.substring(0, baseUrl.length - 1)
+            : baseUrl,
+        _authHeader =
+            'Basic ${base64Encode(utf8.encode('$clientId:$clientSecret'))}',
         _requestTimeout = requestTimeout;
 
   static const _userAgent = 'identisure-client-dart/0.1.0';
@@ -30,7 +33,8 @@ class Transport {
     if (_ownsHttp) _http.close();
   }
 
-  Future<Map<String, dynamic>> post(String path, Map<String, dynamic> body) async {
+  Future<Map<String, dynamic>> post(
+      String path, Map<String, dynamic> body) async {
     final res = await _send(http.Request('POST', Uri.parse('$_baseUrl$path'))
       ..headers['Content-Type'] = 'application/json'
       ..body = jsonEncode(body));
@@ -73,7 +77,8 @@ class Transport {
     } on http.ClientException catch (e) {
       throw IdentisureException(0, e.message);
     } on TimeoutException {
-      throw IdentisureException(0, 'Request timed out after ${_requestTimeout.inMilliseconds} ms');
+      throw IdentisureException(
+          0, 'Request timed out after ${_requestTimeout.inMilliseconds} ms');
     }
     _ensureOk(res);
     return res;
@@ -84,7 +89,9 @@ class Transport {
       String message;
       try {
         final decoded = jsonDecode(_bodyText(res));
-        message = (decoded is Map && decoded['message'] is String) ? decoded['message'] as String : _bodyText(res);
+        message = (decoded is Map && decoded['message'] is String)
+            ? decoded['message'] as String
+            : _bodyText(res);
       } catch (_) {
         message = _bodyText(res);
       }
@@ -99,5 +106,6 @@ class Transport {
   }
 
   // JSON is UTF-8 (RFC 8259), but res.body falls back to Latin-1 when Content-Type has no charset.
-  String _bodyText(http.Response res) => utf8.decode(res.bodyBytes, allowMalformed: true);
+  String _bodyText(http.Response res) =>
+      utf8.decode(res.bodyBytes, allowMalformed: true);
 }

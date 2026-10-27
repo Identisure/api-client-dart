@@ -9,12 +9,17 @@ void main() {
 
   setUp(() {
     mock = MockClient();
-    client = IdentisureClientBuilder('cid', 'sec').baseUrl('https://x.test').httpClient(mock).build();
+    client = IdentisureClientBuilder('cid', 'sec')
+        .baseUrl('https://x.test')
+        .httpClient(mock)
+        .build();
   });
 
   test('auth pending', () async {
-    mock.enqueue(200, {'status': 'PENDING', 'id': 'no1', 'url': 'https://login'});
-    final result = await client.bankIdNo.auth(const BankIdNoAuthRequest(requestSsn: true));
+    mock.enqueue(
+        200, {'status': 'PENDING', 'id': 'no1', 'url': 'https://login'});
+    final result =
+        await client.bankIdNo.auth(const BankIdNoAuthRequest(requestSsn: true));
     expect(result, isA<BankIdNoPending>());
     expect((result as BankIdNoPending).url, 'https://login');
   });

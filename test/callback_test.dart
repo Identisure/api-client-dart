@@ -9,7 +9,8 @@ void main() {
   const secret = 'test-secret';
 
   test('valid signature', () {
-    expect(verifyCallbackSignature(utf8.encode(body), signature, secret), isTrue);
+    expect(
+        verifyCallbackSignature(utf8.encode(body), signature, secret), isTrue);
   });
 
   test('tampered body', () {
@@ -18,6 +19,7 @@ void main() {
   });
 
   test('malformed signature', () {
-    expect(verifyCallbackSignature(utf8.encode(body), 'not base64!', secret), isFalse);
+    expect(verifyCallbackSignature(utf8.encode(body), 'not base64!', secret),
+        isFalse);
   });
 }

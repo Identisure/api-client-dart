@@ -11,17 +11,22 @@ void main() {
 
   setUp(() {
     mock = MockClient();
-    client = IdentisureClientBuilder('cid', 'sec').baseUrl('https://x.test').httpClient(mock).build();
+    client = IdentisureClientBuilder('cid', 'sec')
+        .baseUrl('https://x.test')
+        .httpClient(mock)
+        .build();
   });
 
   test('upload', () async {
     mock.enqueue(200, {'id': 'doc1', 'hash': 'h1'});
     final data = utf8.encode('PDF-DATA');
-    final result = await client.document.upload(data, 'contract.pdf', mimeType: 'application/pdf');
+    final result = await client.document
+        .upload(data, 'contract.pdf', mimeType: 'application/pdf');
     expect(result.id, 'doc1');
     expect(result.hash, 'h1');
 
-    expect(mock.lastRequest.headers['Content-Type'], startsWith('multipart/form-data'));
+    expect(mock.lastRequest.headers['Content-Type'],
+        startsWith('multipart/form-data'));
     final body = mock.lastRequestBody;
     expect(body, contains('filename="contract.pdf"'));
     expect(body.toLowerCase(), contains('content-type: application/pdf'));

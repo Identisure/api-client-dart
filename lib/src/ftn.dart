@@ -32,12 +32,14 @@ class FtnAuthRequest {
 // --- Status sealed classes ---
 
 sealed class FtnStatus {
-  factory FtnStatus.fromJson(Map<String, dynamic> json) => switch (json['status']) {
+  factory FtnStatus.fromJson(Map<String, dynamic> json) =>
+      switch (json['status']) {
         'PENDING' => FtnPending.fromJson(json),
         'COMPLETED' => FtnCompleted.fromJson(json),
         'FAILED' => FtnFailed.fromJson(json),
         final String status => FtnUnknown(status: status),
-        _ => throw IdentisureException(0, 'Invalid ftn status: ${json['status']}'),
+        _ =>
+          throw IdentisureException(0, 'Invalid ftn status: ${json['status']}'),
       };
 }
 
@@ -135,28 +137,33 @@ class FtnEndpoint {
   Future<FtnStatus> auth(FtnAuthRequest req) async =>
       FtnStatus.fromJson(await _transport.post('/v3/ftn/auth', req.toJson()));
 
-  Future<AgeVerificationStatus> ageVerification(AgeVerificationRequest req) async =>
-      AgeVerificationStatus.fromJson(await _transport.post('/v3/ftn/age-verification', req.toJson()));
+  Future<AgeVerificationStatus> ageVerification(
+          AgeVerificationRequest req) async =>
+      AgeVerificationStatus.fromJson(
+          await _transport.post('/v3/ftn/age-verification', req.toJson()));
 
   Future<FtnStatus> authStatus(String id) async =>
       FtnStatus.fromJson(await _transport.get('/v3/ftn/auth/$id'));
 
   Future<AgeVerificationStatus> ageVerificationStatus(String id) async =>
-      AgeVerificationStatus.fromJson(await _transport.get('/v3/ftn/age-verification/$id'));
+      AgeVerificationStatus.fromJson(
+          await _transport.get('/v3/ftn/age-verification/$id'));
 
   Future<void> cancelAuth(String id) => _transport.delete('/v3/ftn/auth/$id');
 
   Future<void> cancelAgeVerification(String id) =>
       _transport.delete('/v3/ftn/age-verification/$id');
 
-  Future<FtnStatus> waitForAuth(String id, {PollOptions opts = const PollOptions()}) =>
+  Future<FtnStatus> waitForAuth(String id,
+          {PollOptions opts = const PollOptions()}) =>
       _pollFtn(() => authStatus(id), opts);
 
-  Future<AgeVerificationStatus> waitForAgeVerification(
-          String id, {PollOptions opts = const PollOptions()}) =>
+  Future<AgeVerificationStatus> waitForAgeVerification(String id,
+          {PollOptions opts = const PollOptions()}) =>
       _pollAge(() => ageVerificationStatus(id), opts);
 
-  Future<FtnStatus> _pollFtn(Future<FtnStatus> Function() fn, PollOptions opts) async {
+  Future<FtnStatus> _pollFtn(
+      Future<FtnStatus> Function() fn, PollOptions opts) async {
     final stopwatch = Stopwatch()..start();
     while (true) {
       final status = await fn();

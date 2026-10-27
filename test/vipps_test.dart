@@ -11,12 +11,17 @@ void main() {
 
   setUp(() {
     mock = MockClient();
-    client = IdentisureClientBuilder('cid', 'sec').baseUrl('https://x.test').httpClient(mock).build();
+    client = IdentisureClientBuilder('cid', 'sec')
+        .baseUrl('https://x.test')
+        .httpClient(mock)
+        .build();
   });
 
   test('auth pending', () async {
-    mock.enqueue(200, {'status': 'PENDING', 'id': 'v1', 'url': 'https://vipps.login'});
-    final result = await client.vipps.auth(const VippsAuthRequest(requestSsn: true));
+    mock.enqueue(
+        200, {'status': 'PENDING', 'id': 'v1', 'url': 'https://vipps.login'});
+    final result =
+        await client.vipps.auth(const VippsAuthRequest(requestSsn: true));
     expect(result, isA<VippsPending>());
     expect((result as VippsPending).url, 'https://vipps.login');
   });

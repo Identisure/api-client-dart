@@ -23,7 +23,8 @@ void main() {
       'id': 'abc',
       'autoStartToken': 'tok',
     });
-    final result = await client.bankIdSe.auth(const BankIdSeAuthRequest(ssn: '199001011234'));
+    final result = await client.bankIdSe
+        .auth(const BankIdSeAuthRequest(ssn: '199001011234'));
     expect(result, isA<BankIdSePending>());
     final p = result as BankIdSePending;
     expect(p.id, 'abc');
@@ -62,7 +63,8 @@ void main() {
       'hintCode': 'outstandingTransaction',
     });
     final result = await client.bankIdSe.phoneAuth(
-      const BankIdSePhoneAuthRequest(ssn: '199001011234', callInitiator: 'USER'),
+      const BankIdSePhoneAuthRequest(
+          ssn: '199001011234', callInitiator: 'USER'),
     );
     expect(result, isA<BankIdSePendingPhone>());
   });
@@ -76,7 +78,8 @@ void main() {
       'age': 34,
       'verifiedAt': '2026-06-08T10:00:00Z',
     });
-    final result = await client.bankIdSe.verify(const BankIdSeVerifyRequest(qrCode: 'qr'));
+    final result =
+        await client.bankIdSe.verify(const BankIdSeVerifyRequest(qrCode: 'qr'));
     expect(result.age, 34);
   });
 

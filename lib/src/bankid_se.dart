@@ -186,7 +186,8 @@ sealed class BankIdSeStatus {
         'COMPLETED' => BankIdSeCompleted.fromJson(json),
         'FAILED' => BankIdSeFailed.fromJson(json),
         final String status => BankIdSeUnknown(status: status),
-        _ => throw IdentisureException(0, 'Invalid bankid-se status: ${json['status']}'),
+        _ => throw IdentisureException(
+            0, 'Invalid bankid-se status: ${json['status']}'),
       };
 }
 
@@ -197,7 +198,8 @@ sealed class BankIdSePhoneStatus {
         'COMPLETED' => BankIdSeCompleted.fromJson(json),
         'FAILED' => BankIdSeFailed.fromJson(json),
         final String status => BankIdSeUnknown(status: status),
-        _ => throw IdentisureException(0, 'Invalid bankid-se phone status: ${json['status']}'),
+        _ => throw IdentisureException(
+            0, 'Invalid bankid-se phone status: ${json['status']}'),
       };
 }
 
@@ -224,7 +226,8 @@ final class BankIdSePending implements BankIdSeStatus {
   final String? qrStartSecret;
   final String? hintCode;
 
-  factory BankIdSePending.fromJson(Map<String, dynamic> json) => BankIdSePending(
+  factory BankIdSePending.fromJson(Map<String, dynamic> json) =>
+      BankIdSePending(
         id: json['id'] as String,
         refId: json['refId'] as String?,
         autoStartToken: json['autoStartToken'] as String?,
@@ -295,8 +298,12 @@ final class BankIdSeCompleted implements BankIdSeStatus, BankIdSePhoneStatus {
         certStartDate: json['certStartDate'] as String?,
         ocspResponse: json['ocspResponse'] as String,
         risk: json['risk'] as String?,
-        device: json['device'] == null ? null : BankIdSeDevice.fromJson(json['device'] as Map<String, dynamic>),
-        stepUp: json['stepUp'] == null ? null : BankIdSeStepUp.fromJson(json['stepUp'] as Map<String, dynamic>),
+        device: json['device'] == null
+            ? null
+            : BankIdSeDevice.fromJson(json['device'] as Map<String, dynamic>),
+        stepUp: json['stepUp'] == null
+            ? null
+            : BankIdSeStepUp.fromJson(json['stepUp'] as Map<String, dynamic>),
         address: json['address'] as String?,
         companySignatoryText: json['companySignatoryText'] as String?,
         authenticatedAt: json['authenticatedAt'] as String?,
@@ -349,22 +356,29 @@ class BankIdSeEndpoint {
   final Transport _transport;
 
   Future<BankIdSeStatus> auth(BankIdSeAuthRequest req) async =>
-      BankIdSeStatus.fromJson(await _transport.post('/v3/bankid-se/auth', req.toJson()));
+      BankIdSeStatus.fromJson(
+          await _transport.post('/v3/bankid-se/auth', req.toJson()));
 
   Future<BankIdSePhoneStatus> phoneAuth(BankIdSePhoneAuthRequest req) async =>
-      BankIdSePhoneStatus.fromJson(await _transport.post('/v3/bankid-se/phone/auth', req.toJson()));
+      BankIdSePhoneStatus.fromJson(
+          await _transport.post('/v3/bankid-se/phone/auth', req.toJson()));
 
   Future<BankIdSeStatus> sign(BankIdSeSignRequest req) async =>
-      BankIdSeStatus.fromJson(await _transport.post('/v3/bankid-se/sign', req.toJson()));
+      BankIdSeStatus.fromJson(
+          await _transport.post('/v3/bankid-se/sign', req.toJson()));
 
   Future<BankIdSePhoneStatus> phoneSign(BankIdSePhoneSignRequest req) async =>
-      BankIdSePhoneStatus.fromJson(await _transport.post('/v3/bankid-se/phone/sign', req.toJson()));
+      BankIdSePhoneStatus.fromJson(
+          await _transport.post('/v3/bankid-se/phone/sign', req.toJson()));
 
   Future<BankIdSeVerifyResponse> verify(BankIdSeVerifyRequest req) async =>
-      BankIdSeVerifyResponse.fromJson(await _transport.post('/v3/bankid-se/verify', req.toJson()));
+      BankIdSeVerifyResponse.fromJson(
+          await _transport.post('/v3/bankid-se/verify', req.toJson()));
 
-  Future<AgeVerificationStatus> ageVerification(AgeVerificationRequest req) async =>
-      AgeVerificationStatus.fromJson(await _transport.post('/v3/bankid-se/age-verification', req.toJson()));
+  Future<AgeVerificationStatus> ageVerification(
+          AgeVerificationRequest req) async =>
+      AgeVerificationStatus.fromJson(await _transport.post(
+          '/v3/bankid-se/age-verification', req.toJson()));
 
   Future<BankIdSeStatus> authStatus(String id) async =>
       BankIdSeStatus.fromJson(await _transport.get('/v3/bankid-se/auth/$id'));
@@ -373,22 +387,30 @@ class BankIdSeEndpoint {
       BankIdSeStatus.fromJson(await _transport.get('/v3/bankid-se/sign/$id'));
 
   Future<AgeVerificationStatus> ageVerificationStatus(String id) async =>
-      AgeVerificationStatus.fromJson(await _transport.get('/v3/bankid-se/age-verification/$id'));
+      AgeVerificationStatus.fromJson(
+          await _transport.get('/v3/bankid-se/age-verification/$id'));
 
-  Future<void> cancelAuth(String id) => _transport.delete('/v3/bankid-se/auth/$id');
-  Future<void> cancelSign(String id) => _transport.delete('/v3/bankid-se/sign/$id');
-  Future<void> cancelAgeVerification(String id) => _transport.delete('/v3/bankid-se/age-verification/$id');
+  Future<void> cancelAuth(String id) =>
+      _transport.delete('/v3/bankid-se/auth/$id');
+  Future<void> cancelSign(String id) =>
+      _transport.delete('/v3/bankid-se/sign/$id');
+  Future<void> cancelAgeVerification(String id) =>
+      _transport.delete('/v3/bankid-se/age-verification/$id');
 
-  Future<BankIdSeStatus> waitForAuth(String id, {PollOptions opts = const PollOptions()}) =>
+  Future<BankIdSeStatus> waitForAuth(String id,
+          {PollOptions opts = const PollOptions()}) =>
       _pollStatus(() => authStatus(id), opts);
 
-  Future<BankIdSeStatus> waitForSign(String id, {PollOptions opts = const PollOptions()}) =>
+  Future<BankIdSeStatus> waitForSign(String id,
+          {PollOptions opts = const PollOptions()}) =>
       _pollStatus(() => signStatus(id), opts);
 
-  Future<AgeVerificationStatus> waitForAgeVerification(String id, {PollOptions opts = const PollOptions()}) =>
+  Future<AgeVerificationStatus> waitForAgeVerification(String id,
+          {PollOptions opts = const PollOptions()}) =>
       _pollAgeStatus(() => ageVerificationStatus(id), opts);
 
-  Future<BankIdSeStatus> _pollStatus(Future<BankIdSeStatus> Function() fn, PollOptions opts) async {
+  Future<BankIdSeStatus> _pollStatus(
+      Future<BankIdSeStatus> Function() fn, PollOptions opts) async {
     final stopwatch = Stopwatch()..start();
     while (true) {
       final status = await fn();

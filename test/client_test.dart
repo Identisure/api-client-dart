@@ -29,7 +29,8 @@ void main() {
     await transport.get('/v3/ping');
 
     expect(mock.lastRequest.headers['Authorization'], 'Basic Y2lkOnNlYw==');
-    expect(mock.lastRequest.headers['User-Agent'], contains('identisure-client-dart/'));
+    expect(mock.lastRequest.headers['User-Agent'],
+        contains('identisure-client-dart/'));
     expect(mock.lastRequest.url.toString(), 'https://example.test/v3/ping');
   });
 
@@ -62,12 +63,14 @@ void main() {
 
     expect(
       () => transport.get('/v3/ping'),
-      throwsA(isA<IdentisureException>().having((e) => e.statusCode, 'statusCode', 0)),
+      throwsA(isA<IdentisureException>()
+          .having((e) => e.statusCode, 'statusCode', 0)),
     );
   });
 }
 
 class _HangingClient extends http.BaseClient {
   @override
-  Future<http.StreamedResponse> send(http.BaseRequest request) => Completer<http.StreamedResponse>().future;
+  Future<http.StreamedResponse> send(http.BaseRequest request) =>
+      Completer<http.StreamedResponse>().future;
 }

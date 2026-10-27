@@ -77,12 +77,14 @@ class MitIdSignResult {
 }
 
 sealed class MitIdStatus {
-  factory MitIdStatus.fromJson(Map<String, dynamic> json) => switch (json['status']) {
+  factory MitIdStatus.fromJson(Map<String, dynamic> json) =>
+      switch (json['status']) {
         'PENDING' => MitIdPending.fromJson(json),
         'COMPLETED' => MitIdCompleted.fromJson(json),
         'FAILED' => MitIdFailed.fromJson(json),
         final String status => MitIdUnknown(status: status),
-        _ => throw IdentisureException(0, 'Invalid mitid status: ${json['status']}'),
+        _ => throw IdentisureException(
+            0, 'Invalid mitid status: ${json['status']}'),
       };
 }
 
@@ -93,7 +95,8 @@ final class MitIdUnknown implements MitIdStatus {
 }
 
 final class MitIdPending implements MitIdStatus {
-  const MitIdPending({required this.id, this.refId, this.url, this.bindingMessage});
+  const MitIdPending(
+      {required this.id, this.refId, this.url, this.bindingMessage});
   final String id;
   final String? refId;
   final String? url;
@@ -156,7 +159,8 @@ final class MitIdCompleted implements MitIdStatus {
         bankId: json['bankId'] as String?,
         signResult: json['signResult'] == null
             ? null
-            : MitIdSignResult.fromJson(json['signResult'] as Map<String, dynamic>),
+            : MitIdSignResult.fromJson(
+                json['signResult'] as Map<String, dynamic>),
         authenticatedAt: json['authenticatedAt'] as String?,
         signedAt: json['signedAt'] as String?,
       );
@@ -178,35 +182,44 @@ class MitIdEndpoint {
   MitIdEndpoint(this._transport);
   final Transport _transport;
 
-  Future<MitIdStatus> auth(MitIdAuthRequest req) async =>
-      MitIdStatus.fromJson(await _transport.post('/v3/mitid/auth', req.toJson()));
+  Future<MitIdStatus> auth(MitIdAuthRequest req) async => MitIdStatus.fromJson(
+      await _transport.post('/v3/mitid/auth', req.toJson()));
   Future<MitIdStatus> backchannelAuth(MitIdBackchannelAuthRequest req) async =>
-      MitIdStatus.fromJson(await _transport.post('/v3/mitid/backchannel/auth', req.toJson()));
-  Future<MitIdStatus> sign(MitIdSignRequest req) async =>
-      MitIdStatus.fromJson(await _transport.post('/v3/mitid/sign', req.toJson()));
+      MitIdStatus.fromJson(
+          await _transport.post('/v3/mitid/backchannel/auth', req.toJson()));
+  Future<MitIdStatus> sign(MitIdSignRequest req) async => MitIdStatus.fromJson(
+      await _transport.post('/v3/mitid/sign', req.toJson()));
   Future<MitIdStatus> authStatus(String id) async =>
       MitIdStatus.fromJson(await _transport.get('/v3/mitid/auth/$id'));
   Future<MitIdStatus> signStatus(String id) async =>
       MitIdStatus.fromJson(await _transport.get('/v3/mitid/sign/$id'));
   Future<void> cancelAuth(String id) => _transport.delete('/v3/mitid/auth/$id');
   Future<void> cancelSign(String id) => _transport.delete('/v3/mitid/sign/$id');
-  Future<void> cancelAgeVerification(String id) => _transport.delete('/v3/mitid/age-verification/$id');
+  Future<void> cancelAgeVerification(String id) =>
+      _transport.delete('/v3/mitid/age-verification/$id');
 
-  Future<MitIdStatus> waitForAuth(String id, {PollOptions opts = const PollOptions()}) =>
+  Future<MitIdStatus> waitForAuth(String id,
+          {PollOptions opts = const PollOptions()}) =>
       _poll(() => authStatus(id), opts);
-  Future<MitIdStatus> waitForSign(String id, {PollOptions opts = const PollOptions()}) =>
+  Future<MitIdStatus> waitForSign(String id,
+          {PollOptions opts = const PollOptions()}) =>
       _poll(() => signStatus(id), opts);
 
-  Future<AgeVerificationStatus> ageVerification(AgeVerificationRequest req) async =>
-      AgeVerificationStatus.fromJson(await _transport.post('/v3/mitid/age-verification', req.toJson()));
+  Future<AgeVerificationStatus> ageVerification(
+          AgeVerificationRequest req) async =>
+      AgeVerificationStatus.fromJson(
+          await _transport.post('/v3/mitid/age-verification', req.toJson()));
 
   Future<AgeVerificationStatus> ageVerificationStatus(String id) async =>
-      AgeVerificationStatus.fromJson(await _transport.get('/v3/mitid/age-verification/$id'));
+      AgeVerificationStatus.fromJson(
+          await _transport.get('/v3/mitid/age-verification/$id'));
 
-  Future<AgeVerificationStatus> waitForAgeVerification(String id, {PollOptions opts = const PollOptions()}) =>
+  Future<AgeVerificationStatus> waitForAgeVerification(String id,
+          {PollOptions opts = const PollOptions()}) =>
       _pollAge(() => ageVerificationStatus(id), opts);
 
-  Future<MitIdStatus> _poll(Future<MitIdStatus> Function() fn, PollOptions opts) async {
+  Future<MitIdStatus> _poll(
+      Future<MitIdStatus> Function() fn, PollOptions opts) async {
     final stopwatch = Stopwatch()..start();
     while (true) {
       final status = await fn();
@@ -216,7 +229,8 @@ class MitIdEndpoint {
     }
   }
 
-  Future<AgeVerificationStatus> _pollAge(Future<AgeVerificationStatus> Function() fn, PollOptions opts) async {
+  Future<AgeVerificationStatus> _pollAge(
+      Future<AgeVerificationStatus> Function() fn, PollOptions opts) async {
     final stopwatch = Stopwatch()..start();
     while (true) {
       final status = await fn();

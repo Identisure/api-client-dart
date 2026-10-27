@@ -23,7 +23,8 @@ class FrejaAuthRequest {
   Map<String, dynamic> toJson() => {
         if (ssn != null) 'ssn': ssn,
         if (callbackUrl != null) 'callbackUrl': callbackUrl,
-        if (minRegistrationLevel != null) 'minRegistrationLevel': minRegistrationLevel,
+        if (minRegistrationLevel != null)
+          'minRegistrationLevel': minRegistrationLevel,
         if (orgNumber != null) 'orgNumber': orgNumber,
         if (requestAddress != null) 'requestAddress': requestAddress,
         if (refId != null) 'refId': refId,
@@ -53,7 +54,8 @@ class FrejaBackchannelAuthRequest {
         'ssn': ssn,
         'country': country,
         if (callbackUrl != null) 'callbackUrl': callbackUrl,
-        if (minRegistrationLevel != null) 'minRegistrationLevel': minRegistrationLevel,
+        if (minRegistrationLevel != null)
+          'minRegistrationLevel': minRegistrationLevel,
         if (orgNumber != null) 'orgNumber': orgNumber,
         if (requestAddress != null) 'requestAddress': requestAddress,
         if (refId != null) 'refId': refId,
@@ -83,7 +85,8 @@ class FrejaSignRequest {
         'text': text,
         if (ssn != null) 'ssn': ssn,
         if (callbackUrl != null) 'callbackUrl': callbackUrl,
-        if (minRegistrationLevel != null) 'minRegistrationLevel': minRegistrationLevel,
+        if (minRegistrationLevel != null)
+          'minRegistrationLevel': minRegistrationLevel,
         if (orgNumber != null) 'orgNumber': orgNumber,
         if (requestAddress != null) 'requestAddress': requestAddress,
         if (refId != null) 'refId': refId,
@@ -116,7 +119,8 @@ class FrejaBackchannelSignRequest {
         'country': country,
         'text': text,
         if (callbackUrl != null) 'callbackUrl': callbackUrl,
-        if (minRegistrationLevel != null) 'minRegistrationLevel': minRegistrationLevel,
+        if (minRegistrationLevel != null)
+          'minRegistrationLevel': minRegistrationLevel,
         if (orgNumber != null) 'orgNumber': orgNumber,
         if (requestAddress != null) 'requestAddress': requestAddress,
         if (refId != null) 'refId': refId,
@@ -124,12 +128,14 @@ class FrejaBackchannelSignRequest {
 }
 
 sealed class FrejaStatus {
-  factory FrejaStatus.fromJson(Map<String, dynamic> json) => switch (json['status']) {
+  factory FrejaStatus.fromJson(Map<String, dynamic> json) =>
+      switch (json['status']) {
         'PENDING' => FrejaPending.fromJson(json),
         'COMPLETED' => FrejaCompleted.fromJson(json),
         'FAILED' => FrejaFailed.fromJson(json),
         final String status => FrejaUnknown(status: status),
-        _ => throw IdentisureException(0, 'Invalid freja status: ${json['status']}'),
+        _ => throw IdentisureException(
+            0, 'Invalid freja status: ${json['status']}'),
       };
 }
 
@@ -220,37 +226,47 @@ class FrejaEndpoint {
   FrejaEndpoint(this._transport);
   final Transport _transport;
 
-  Future<FrejaStatus> auth(FrejaAuthRequest req) async =>
-      FrejaStatus.fromJson(await _transport.post('/v3/freja/auth', req.toJson()));
+  Future<FrejaStatus> auth(FrejaAuthRequest req) async => FrejaStatus.fromJson(
+      await _transport.post('/v3/freja/auth', req.toJson()));
   Future<FrejaStatus> backchannelAuth(FrejaBackchannelAuthRequest req) async =>
-      FrejaStatus.fromJson(await _transport.post('/v3/freja/backchannel/auth', req.toJson()));
-  Future<FrejaStatus> sign(FrejaSignRequest req) async =>
-      FrejaStatus.fromJson(await _transport.post('/v3/freja/sign', req.toJson()));
+      FrejaStatus.fromJson(
+          await _transport.post('/v3/freja/backchannel/auth', req.toJson()));
+  Future<FrejaStatus> sign(FrejaSignRequest req) async => FrejaStatus.fromJson(
+      await _transport.post('/v3/freja/sign', req.toJson()));
   Future<FrejaStatus> backchannelSign(FrejaBackchannelSignRequest req) async =>
-      FrejaStatus.fromJson(await _transport.post('/v3/freja/backchannel/sign', req.toJson()));
+      FrejaStatus.fromJson(
+          await _transport.post('/v3/freja/backchannel/sign', req.toJson()));
   Future<FrejaStatus> authStatus(String id) async =>
       FrejaStatus.fromJson(await _transport.get('/v3/freja/auth/$id'));
   Future<FrejaStatus> signStatus(String id) async =>
       FrejaStatus.fromJson(await _transport.get('/v3/freja/sign/$id'));
   Future<void> cancelAuth(String id) => _transport.delete('/v3/freja/auth/$id');
   Future<void> cancelSign(String id) => _transport.delete('/v3/freja/sign/$id');
-  Future<void> cancelAgeVerification(String id) => _transport.delete('/v3/freja/age-verification/$id');
+  Future<void> cancelAgeVerification(String id) =>
+      _transport.delete('/v3/freja/age-verification/$id');
 
-  Future<FrejaStatus> waitForAuth(String id, {PollOptions opts = const PollOptions()}) =>
+  Future<FrejaStatus> waitForAuth(String id,
+          {PollOptions opts = const PollOptions()}) =>
       _poll(() => authStatus(id), opts);
-  Future<FrejaStatus> waitForSign(String id, {PollOptions opts = const PollOptions()}) =>
+  Future<FrejaStatus> waitForSign(String id,
+          {PollOptions opts = const PollOptions()}) =>
       _poll(() => signStatus(id), opts);
 
-  Future<AgeVerificationStatus> ageVerification(AgeVerificationRequest req) async =>
-      AgeVerificationStatus.fromJson(await _transport.post('/v3/freja/age-verification', req.toJson()));
+  Future<AgeVerificationStatus> ageVerification(
+          AgeVerificationRequest req) async =>
+      AgeVerificationStatus.fromJson(
+          await _transport.post('/v3/freja/age-verification', req.toJson()));
 
   Future<AgeVerificationStatus> ageVerificationStatus(String id) async =>
-      AgeVerificationStatus.fromJson(await _transport.get('/v3/freja/age-verification/$id'));
+      AgeVerificationStatus.fromJson(
+          await _transport.get('/v3/freja/age-verification/$id'));
 
-  Future<AgeVerificationStatus> waitForAgeVerification(String id, {PollOptions opts = const PollOptions()}) =>
+  Future<AgeVerificationStatus> waitForAgeVerification(String id,
+          {PollOptions opts = const PollOptions()}) =>
       _pollAge(() => ageVerificationStatus(id), opts);
 
-  Future<FrejaStatus> _poll(Future<FrejaStatus> Function() fn, PollOptions opts) async {
+  Future<FrejaStatus> _poll(
+      Future<FrejaStatus> Function() fn, PollOptions opts) async {
     final stopwatch = Stopwatch()..start();
     while (true) {
       final status = await fn();
@@ -260,7 +276,8 @@ class FrejaEndpoint {
     }
   }
 
-  Future<AgeVerificationStatus> _pollAge(Future<AgeVerificationStatus> Function() fn, PollOptions opts) async {
+  Future<AgeVerificationStatus> _pollAge(
+      Future<AgeVerificationStatus> Function() fn, PollOptions opts) async {
     final stopwatch = Stopwatch()..start();
     while (true) {
       final status = await fn();
