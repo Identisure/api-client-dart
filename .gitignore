@@ -4,3 +4,4 @@ build/
 
 # IDE
 .idea/
+/docs/

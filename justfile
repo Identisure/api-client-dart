@@ -10,3 +10,7 @@ check:
 
 publish:
     dart pub publish
+
+gen-doc:
+    dart pub get
+    dart doc --output docs
