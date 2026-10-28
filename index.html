@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="identisure_client API docs, for the Dart programming language.">
+  <title>identisure_client - Dart API docs</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="static-assets/github.css?v1">
+  <link rel="stylesheet" href="static-assets/styles.css?v1">
+  <link rel="icon" href="static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li class="self-crumb">identisure_client package</li>
+  </ol>
+  <div class="self-name">identisure_client</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+  <div id="dartdoc-main-content" class="main-content">
+      
+<section class="desc markdown">
+  <img align="left" height="100" style="margin-right: 10px;" src="img/icon.png">
+<h1 id="identisure-dart-client">Identisure Dart Client</h1>
+<p><a href="https://pub.dev/packages/identisure_client"><img src="https://img.shields.io/pub/v/identisure_client?style=flat-square" alt="pub.dev version"></a>
+<a href="https://identisure.github.io/api-client-dart"><img src="https://img.shields.io/badge/github-docs-orange?logo=github&amp;style=flat-square" alt="Documentation"></a>
+<a href="https://opensource.org/license/mit"><img src="https://img.shields.io/badge/license-MIT-blue?style=flat-square" alt="MIT license"></a></p>
+<p>API client for the <a href="https://developers.identisure.com">Identisure</a> REST API.</p>
+<p>Documentation: <a href="https://identisure.github.io/api-client-dart">identisure.github.io/api-client-dart</a></p>
+<h2 id="requirements">Requirements</h2>
+<p>Dart 3.4 or later.</p>
+<h2 id="supported-providers">Supported providers</h2>
+<ul>
+<li><strong>BankID SE</strong>: auth, sign, phone auth and sign, QR verify, age verification</li>
+<li><strong>BankID NO</strong>: auth, backchannel auth, sign, age verification</li>
+<li><strong>Freja eID</strong>: auth, backchannel auth, sign, backchannel sign, age verification</li>
+<li><strong>MitID</strong>: auth, backchannel auth, sign, age verification</li>
+<li><strong>FTN</strong> (Finnish Trust Network): auth, age verification</li>
+<li><strong>Vipps MobilePay</strong>: auth, backchannel auth</li>
+<li><strong>Documents</strong>: upload and download documents for signing</li>
+</ul>
+<h2 id="installation">Installation</h2>
+<pre class="language-sh"><code class="language-sh">dart pub add identisure_client
+</code></pre>
+<h2 id="usage">Usage</h2>
+<pre class="language-dart"><code class="language-dart">import 'package:identisure_client/identisure_client.dart';
+
+Future&lt;void&gt; main() async {
+  final client = IdentisureClientBuilder('client_id', 'client_secret')
+      .environment(Environment.staging)
+      .build();
+
+  final session = await client.bankIdSe.auth(const BankIdSeAuthRequest());
+  if (session is BankIdSePending) {
+    print('Session ID: ${session.id}');
+
+    final result = await client.bankIdSe.waitForAuth(session.id);
+    final message = switch (result) {
+      BankIdSeCompleted(:final name, :final ssn) =&gt; 'Authenticated: $name ($ssn)',
+      BankIdSeFailed(:final error) =&gt; 'Failed: $error',
+      BankIdSePending() =&gt; 'Still pending',
+      BankIdSeUnknown(:final status) =&gt; 'Unknown status: $status',
+    };
+    print(message);
+  }
+
+  client.close();
+}
+</code></pre>
+<h3 id="verifying-callbacks">Verifying callbacks</h3>
+<p>Pass the raw request body exactly as received, before parsing it.</p>
+<pre class="language-dart"><code class="language-dart">final valid = verifyCallbackSignature(rawBodyBytes, request.headers['x-signature-sha256']!, hmacSecret);
+</code></pre>
+<h2 id="development">Development</h2>
+<h3 id="prerequisites">Prerequisites</h3>
+<ul>
+<li>Dart 3.4+</li>
+</ul>
+<p>The tests load shared fixtures from a git submodule. Clone with <code>--recurse-submodules</code>, or run <code>git submodule update --init</code> in an existing clone.</p>
+<h3 id="build--test--analyze">Build / Test / Analyze</h3>
+<pre class="language-sh"><code class="language-sh">dart pub get
+dart test
+dart analyze
+</code></pre>
+<h3 id="release">Release</h3>
+<p>Set the version in <code>pubspec.yaml</code> and <code>lib/src/transport.dart</code> and commit. Then push a tag:</p>
+<pre class="language-sh"><code class="language-sh">git tag v0.1.0
+git push origin v0.1.0
+</code></pre>
+<p>The release workflow checks that the tag matches the version, runs CI, publishes to pub.dev and creates a GitHub release.</p>
+<h2 id="other-languages">Other languages</h2>
+<p><a href="https://github.com/identisure/api-client-csharp">C#</a>, <a href="https://github.com/identisure/api-client-go">Go</a>, <a href="https://github.com/identisure/api-client-js">TypeScript/JavaScript</a>, <a href="https://github.com/identisure/api-client-jvm">Java/Kotlin</a>, <a href="https://github.com/identisure/api-client-php">PHP</a>, <a href="https://github.com/identisure/api-client-py">Python</a>, <a href="https://github.com/identisure/api-client-ruby">Ruby</a>, <a href="https://github.com/identisure/api-client-rust">Rust</a>, <a href="https://github.com/identisure/api-client-swift">Swift</a></p>
+</section>
+
+
+      <section class="summary">
+          <h2>Libraries</h2>
+        <dl>
+          <dt id="identisure_client">
+  <span class="name"><a href="identisure_client/">identisure_client</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+        </dl>
+      </section>
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li class="self-crumb">identisure_client package</li>
+</ol>
+
+    <h5 class="hidden-xs"><span class="package-name">identisure_client</span> <span class="package-kind">package</span></h5>
+    <ol>
+      <li class="section-title">Libraries</li>
+      <li><a href="identisure_client/">identisure_client</a></li>
+</ol>
+
+  </div>
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div>
+</main>
+<footer>
+  <span class="no-break">
+    identisure_client
+      0.1.0
+  </span>
+  
+</footer>
+
+
+<script src="static-assets/highlight.pack.js?v1"></script>
+<script src="static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+
